@@ -1,0 +1,4 @@
+# Extra deps needed ONLY on the machine where you run `python -m gemini_free.auth`
+# (i.e. a machine with a GUI to log into Google). The server itself doesn't need these.
+playwright>=1.48.0
+python-dotenv>=1.0.1

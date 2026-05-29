@@ -35,8 +35,19 @@ If you need something rock-solid for a real product, use the [official Gemini AP
 ```bash
 git clone https://github.com/nati48/gemini-free.git
 cd gemini-free
-python -m venv .venv && source .venv/bin/activate
+python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
+```
+
+> 💡 **Headless server?** You only need `requirements.txt` (the server part) on the server.
+> Run the cookie auth step on any machine with a GUI (your laptop) — see ["Headless server setup"](#headless-server-setup) below.
+
+### Cookie auth (needs a GUI)
+
+On the same machine, also install the auth-only deps:
+
+```bash
+pip install -r requirements-auth.txt
 playwright install chromium
 ```
 
@@ -118,6 +129,40 @@ gemini-free/
 ```
 
 ---
+
+## Headless server setup
+
+If the box that runs the API has no GUI (typical VPS), do this:
+
+**On your laptop** (Windows/Mac/Linux with a browser):
+
+```bash
+git clone https://github.com/nati48/gemini-free.git
+cd gemini-free
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements-auth.txt
+playwright install chromium
+python -m gemini_free.auth   # log in to Google in the popup window
+```
+
+This produces `cookies.json`. Copy it to the server:
+
+```bash
+scp cookies.json user@your-server:~/gemini-free/cookies.json
+```
+
+**On the server:**
+
+```bash
+sudo apt install -y python3 python3-venv python3-pip   # if missing
+cd ~/gemini-free
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env && nano .env    # set GEMINI_FREE_API_KEY
+uvicorn gemini_free.server:app --host 0.0.0.0 --port 8787
+```
+
+That's it — the server uses the `cookies.json` you copied over.
 
 ## When cookies expire
 
