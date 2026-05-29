@@ -33,7 +33,7 @@ If you need something rock-solid for a real product, use the [official Gemini AP
 ### 1. Install
 
 ```bash
-git clone https://github.com/YOUR_USER/gemini-free.git
+git clone https://github.com/nati48/gemini-free.git
 cd gemini-free
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
